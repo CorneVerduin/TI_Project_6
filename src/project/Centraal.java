@@ -11,6 +11,7 @@ public class Centraal {
 	// en eventueel daarna alvast beginnen met het herkennen van de borden.
 	
 	// daarna kunnen we pas verder kijken naar de wat meer gecompliceerde functies.
+	// tevens moet hiervoor de robot voor inelkaar zijn gezet xD
 	
 	public Centraal() 
 	{
