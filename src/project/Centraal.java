@@ -7,6 +7,11 @@ public class Centraal {
 	private DcMotorController dcController;
 	private StappenMotorController StappenMotorController;
 	
+	// je kan het best gewoon beginnen met het aansturen van de motoren.
+	// en eventueel daarna alvast beginnen met het herkennen van de borden.
+	
+	// daarna kunnen we pas verder kijken naar de wat meer gecompliceerde functies.
+	
 	public Centraal() 
 	{
 		this.dcController = new DcMotorController();
