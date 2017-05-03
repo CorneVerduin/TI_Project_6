@@ -5,7 +5,7 @@ public class Centraal {
 	private int richtingRobot;
 	
 	private DcMotorController dcController;
-	private StappenMotorController StappenMotorController;
+	private StappenMotorController stappenMotorController;
 	
 	// je kan het best gewoon beginnen met het aansturen van de motoren.
 	// en eventueel daarna alvast beginnen met het herkennen van de borden.
@@ -16,7 +16,13 @@ public class Centraal {
 	public Centraal() 
 	{
 		this.dcController = new DcMotorController();
-		this.StappenMotorController = new StappenMotorController();
+		this.stappenMotorController = new StappenMotorController();
+	}
+	
+	public static void main(String args[])
+	{
+		StappenMotorController smp = new StappenMotorController();
+		smp.draaiWiel();
 	}
 	
 	public void noodStop() 
@@ -39,11 +45,13 @@ public class Centraal {
 	
 	public boolean zoekBordInVrachtwagen() 
 	{
+		return true;
 		// nog niet echt apart te implementeren.
 	}
 	
 	public boolean zoekBordInMagazijn() 
 	{
+		return true;
 		// nog niet echt apart te implementeren.
 	}
 	
