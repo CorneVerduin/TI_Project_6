@@ -1,6 +1,36 @@
 package project;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.RaspiPin;
+
 public class Centraal {
+
+
+	private GpioController gpio = GpioFactory.getInstance();	
+	
+	private final Pin PinLv = RaspiPin.GPIO_00;
+	private final Pin PinRv = RaspiPin.GPIO_02;
+	private final Pin PinLa = RaspiPin.GPIO_03;
+	private final Pin PinRa = RaspiPin.GPIO_04;
+	
+	public static void main(String[] args) 
+	{
+		Centraal centraal = new Centraal();
+		
+		Thread MotorLv = new Thread(new StappenMotorController(centraal.gpio, centraal.PinLv));
+		Thread MotorRv = new Thread(new StappenMotorController(centraal.gpio, centraal.PinRv));
+		Thread MotorLa = new Thread(new StappenMotorController(centraal.gpio, centraal.PinLa));
+		Thread MotorRa = new Thread(new StappenMotorController(centraal.gpio, centraal.PinRa));
+		
+		MotorLv.start();
+		MotorRv.start();
+		MotorLa.start();
+		MotorRa.start();
+	}	
+	
+	/*
 	private int snelheidRobot;
 	private int richtingRobot;
 	
@@ -31,6 +61,8 @@ public class Centraal {
 		// zie DcMotorController.stopMotor()
 	}
 	
+	
+	// https://www.vexforum.com/index.php/12370-holonomic-drives-2-0-a-video-tutorial-by-cody/0
 	public int bepaalRichting() 
 	{
 		return richtingRobot;
@@ -70,5 +102,5 @@ public class Centraal {
 		// nog niet echt apart te implementeren.
 	}
 	
-	
+*/	
 }

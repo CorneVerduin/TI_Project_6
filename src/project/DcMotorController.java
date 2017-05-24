@@ -1,7 +1,7 @@
 package project;
 
 public class DcMotorController {
-	private int switch;
+/*	private int switch;
 	
 	public void stopMotor() 
 	{
@@ -29,9 +29,7 @@ public class DcMotorController {
 		if(success = false)
 		{
 			this.resetMotor();
-			this.wachtOpKnop(switch)
-		}
-		*/
+			this.wa
 	}
 	
 	public void resetMotor() 
@@ -42,4 +40,5 @@ public class DcMotorController {
 		// - naar vorige stand
 		// hangt af van waar hij mee bezig is.
 	}
+	*/
 }
