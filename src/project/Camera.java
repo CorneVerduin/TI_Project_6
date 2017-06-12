@@ -6,9 +6,11 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
-public class Camera {
+public class Camera implements Runnable
+{
 	private Mat frame = new Mat(), imgSvh = new Mat(), red = new Mat();	
 	private VideoCapture cam;
+	private boolean camFound = false;
 	
 	public Camera() 
 	{
@@ -16,27 +18,41 @@ public class Camera {
 		this.cam = new VideoCapture(0);
 	}
 	
+	@Override
+	public void run()
+	{
+		this.openCam();
+		while(true) 
+		{
+			if(this.camFound)
+			{
+				this.cam.read(this.frame);	
+				this.findRed(); 	
+			}
+		}
+	}
 
 	public void openCam()
 	{
-		if(!cam.isOpened()){
+		if(!this.cam.isOpened()){
 		    System.out.println("Error");
 		}
 		else 
 		{
-			cam.read(frame);		
+			this.camFound = true;
 		}
 	}
 
 	public void findRed()
 	{
-		Imgproc.cvtColor(frame, imgSvh, Imgproc.COLOR_BGR2HSV);
+		Imgproc.cvtColor(this.frame, this.imgSvh, Imgproc.COLOR_BGR2HSV);
 
-		Core.inRange(imgSvh, new Scalar(109, 100, 100), new Scalar(189, 255, 255), red); 
+		Core.inRange(this.imgSvh, new Scalar(109, 100, 100), new Scalar(189, 255, 255), this.red); 
 
-		int count = Core.countNonZero(red);
+		int count = Core.countNonZero(this.red);
 		
-		if(count > 3000) System.out.println("ROODODODODODODOD");
-		else System.out.println("Geen rood :(");
+		Centraal centraal = new Centraal();
+		
+		if(count > 2000) centraal.rijRichting(4);
 	}
 }

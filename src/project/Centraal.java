@@ -18,6 +18,15 @@ public class Centraal {
 	private final int RICHTING_LINKS = 3;
 	private final int RICHTING_DRAAI = 4;
 	
+	private final int RICHTING_SCHUIN_RV = 5;
+	private final int RICHTING_SCHUIN_RA = 6;
+	private final int RICHTING_SCHUIN_LA = 7;
+	private final int RICHTING_SCHUIN_LV = 8;
+	
+
+	private final Boolean DRAAINIET = null;
+	
+	
 	//stepper pins
 	private final GpioPinDigitalOutput PinLa = this.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00); 
 	private final GpioPinDigitalOutput PinLv = this.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02); 
@@ -43,27 +52,18 @@ public class Centraal {
 	public static void main(String[] args)  
 	{
 		Centraal centraal = new Centraal();
-		Camera camera =  new Camera();
-		camera.openCam();
 		
 		centraal.InitMotors();
 		centraal.initThreads();
+		
+		centraal.rijRichting(centraal.RICHTING_VOORUIT);
 		
 		centraal.MotorLa.start();
 		centraal.MotorLv.start();
 		centraal.MotorRv.start();
 		centraal.MotorRa.start();
+	
 		
-		System.out.println("Rij vooruit!");
-		centraal.rijRichting(centraal.RICHTING_VOORUIT);
-		System.out.println("Rij achteruit!");
-		centraal.rijRichting(centraal.RICHTING_ACHTERUIT);
-		System.out.println("Draai!");
-		centraal.rijRichting(centraal.RICHTING_DRAAI);
-		System.out.println("Rij rechts!");
-		centraal.rijRichting(centraal.RICHTING_RECHTS);
-		System.out.println("Rij links!");
-		centraal.rijRichting(centraal.RICHTING_LINKS);
 	}
 	
 	public void initThreads()
@@ -83,28 +83,25 @@ public class Centraal {
 		this.MotorRaController = new StappenMotorController(this.gpio, this.PinRa, this.PinRaDir);
 	}
 	
-	public void setDirections(boolean wielLvDir, boolean wielLaDir, boolean wielRvDir, boolean wielRaDir) 
+	public void setDirections(Boolean wielLvDir, Boolean wielLaDir, Boolean wielRvDir, Boolean wielRaDir) 
 	{
-		while(true) 
-		{
-			if(!this.MotorLvController.getmotorStand() && !this.MotorLaController.getmotorStand() && !this.MotorRvController.getmotorStand() && !this.MotorRaController.getmotorStand())
-			{			
-				this.MotorLvController.setDir(wielLvDir);
-				this.MotorLaController.setDir(wielLaDir);
-				this.MotorRvController.setDir(wielRvDir);
-				this.MotorRaController.setDir(wielRaDir);
-				break;
-			}
-		}
+			this.MotorLvController.setDirection(wielLvDir);
+			this.MotorLaController.setDirection(wielLaDir);
+			this.MotorRvController.setDirection(wielRvDir);
+			this.MotorRaController.setDirection(wielRaDir);
+
 	}
 	
 	public void rijRichting(int richting) 
 	{
-		if(richting == this.RICHTING_VOORUIT) this.setDirections(this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT);
+		if(richting == this.RICHTING_VOORUIT) this.setDirections(this.WIEL_VOORUIT, this.WIEL_VOORUIT,this.WIEL_VOORUIT,this.WIEL_VOORUIT);
 		if(richting == this.RICHTING_ACHTERUIT) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT);
 		if(richting == this.RICHTING_RECHTS) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_ACHTERUIT);
 		if(richting == this.RICHTING_LINKS) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_ACHTERUIT);
-		if(richting == this.RICHTING_DRAAI) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT);
+		if(richting == this.RICHTING_SCHUIN_RV) this.setDirections(this.WIEL_VOORUIT, this.DRAAINIET,  this.DRAAINIET, this.WIEL_VOORUIT);
+		if(richting == this.RICHTING_SCHUIN_RA) this.setDirections(this.DRAAINIET, this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.DRAAINIET);
+		if(richting == this.RICHTING_SCHUIN_LA) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAINIET,  this.DRAAINIET, this.WIEL_ACHTERUIT);
+		if(richting == this.RICHTING_SCHUIN_LV) this.setDirections(this.DRAAINIET, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.DRAAINIET);
 	}
 	
 	/*

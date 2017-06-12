@@ -1,5 +1,8 @@
 package project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.PinState;
@@ -10,8 +13,7 @@ public class StappenMotorController implements Runnable {
 	
 	private GpioController gpio;
 	
-	private boolean direction, motorStand = false;
-	
+	List<Boolean> directions = new ArrayList<Boolean>();
 	
 	public StappenMotorController(GpioController gpio, GpioPinDigitalOutput selectedPin,  GpioPinDigitalOutput selectedPinDir)
 	{
@@ -26,37 +28,31 @@ public class StappenMotorController implements Runnable {
 	@Override
 	public void run()
 	{
-		while(true) 
+		int directionCount = directions.size();
+		int i;
+		
+		for(i = 0; i < directionCount; i++)
 		{
-			if(this.motorStand) 
-			{
-				this.draaiWiel();
-				try {
-					Thread.sleep(400);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		        this.motorStand = false;
-			}
+			this.draaiWiel(directions.get(i));
 		}
 	}
 	
-	public void setDir(boolean direction) 
-	{
-		this.direction = direction;
-		this.motorStand = true;
+	public void setDirection(Boolean direction) 
+	{ 
+		this.directions.add(direction);
 	}
 	
-	public boolean getmotorStand() { return this.motorStand; }
-	
-	public void draaiWiel() 
+	public void draaiWiel(Boolean direction) 
 	{
-        if(!this.direction) this.selectedPinDir.low();
-		else this.selectedPinDir.high();
+		if(direction != null)
+		{
+			if(!direction) this.selectedPinDir.low();
+			else this.selectedPinDir.high();
+		}
 		
         for(int i = 0; i < 2500; i++)
         {
-        	this.selectedPin.toggle();
+        	if(direction != null) this.selectedPin.toggle();
             try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
