@@ -10,7 +10,7 @@ public class StappenMotorController implements Runnable {
 	
 	private GpioController gpio;
 	
-	private boolean direction, motorStand = false;
+	private boolean direction, turn, motorStand = false;
 	
 	
 	public StappenMotorController(GpioController gpio, GpioPinDigitalOutput selectedPin,  GpioPinDigitalOutput selectedPinDir)
@@ -41,9 +41,10 @@ public class StappenMotorController implements Runnable {
 		}
 	}
 	
-	public void setDir(boolean direction) 
+	public void setDir(boolean direction, boolean turn) 
 	{
 		this.direction = direction;
+		this.turn = turn; 
 		this.motorStand = true;
 	}
 	
@@ -51,18 +52,34 @@ public class StappenMotorController implements Runnable {
 	
 	public void draaiWiel() 
 	{
-        if(!this.direction) this.selectedPinDir.low();
+        
+		if(!this.direction) this.selectedPinDir.low();
 		else this.selectedPinDir.high();
 		
-        for(int i = 0; i < 2500; i++)
-        {
-        	this.selectedPin.toggle();
-            try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-        }
+		if(this.turn){
+	        for(int i = 0; i < 2500; i++)
+	        {
+	        	this.selectedPin.toggle();
+	            try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	        }
+		}
+		else
+		{
+			for(int i = 0; i < 2500; i++)
+	        {
+				try{ 
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	        }
+		}
+		
+        
 	}
 	
 	public void berekenStappenWielen(int snelheidRobot, int richtingRobot)

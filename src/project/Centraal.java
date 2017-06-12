@@ -1,5 +1,7 @@
 package project;
 
+//import org.opencv.core.Mat; never used 
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -12,11 +14,21 @@ public class Centraal {
 	private final boolean WIEL_VOORUIT = false;
 	private final boolean WIEL_ACHTERUIT = true;
 	
+	private final boolean DRAAI_WEL = true; 
+	private final boolean DRAAI_NIET = false;
+	
 	private final int RICHTING_VOORUIT = 0;
 	private final int RICHTING_ACHTERUIT = 1;
 	private final int RICHTING_RECHTS = 2;
 	private final int RICHTING_LINKS = 3;
-	private final int RICHTING_DRAAI = 4;
+	private final int RICHTING_DRAAI_RECHTS = 4;
+	private final int RICHTING_DRAAI_LINGS = 5; 
+	
+	private final int RICHTING_SCHUIN_45 = 6; 
+	private final int RICHTING_SCHUIN_135 = 7; 
+	private final int RICHTING_SCHUIN_225 = 8; 
+	private final int RICHTING_SCHUIN_315 = 9;
+	
 	
 	//stepper pins
 	private final GpioPinDigitalOutput PinLa = this.gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00); 
@@ -43,8 +55,8 @@ public class Centraal {
 	public static void main(String[] args)  
 	{
 		Centraal centraal = new Centraal();
-		Camera camera =  new Camera();
-		camera.openCam();
+		Camera piCam =  new Camera();
+		piCam.openCam();
 		
 		centraal.InitMotors();
 		centraal.initThreads();
@@ -54,16 +66,38 @@ public class Centraal {
 		centraal.MotorRv.start();
 		centraal.MotorRa.start();
 		
+		do{
+			centraal.rijRichting(centraal.RICHTING_DRAAI_LINGS);
+			centraal.rijRichting(centraal.RICHTING_DRAAI_RECHTS);
+			
+		}while(piCam.findRed() != true);
+		
 		System.out.println("Rij vooruit!");
 		centraal.rijRichting(centraal.RICHTING_VOORUIT);
 		System.out.println("Rij achteruit!");
 		centraal.rijRichting(centraal.RICHTING_ACHTERUIT);
 		System.out.println("Draai!");
-		centraal.rijRichting(centraal.RICHTING_DRAAI);
+		centraal.rijRichting(centraal.RICHTING_DRAAI_RECHTS); 
 		System.out.println("Rij rechts!");
 		centraal.rijRichting(centraal.RICHTING_RECHTS);
 		System.out.println("Rij links!");
 		centraal.rijRichting(centraal.RICHTING_LINKS);
+		
+		System.out.println("Draai links!");
+		centraal.rijRichting(centraal.RICHTING_DRAAI_LINGS);
+		
+		System.out.println("Ga naar voren en naar rechts!"); 
+		centraal.rijRichting(centraal.RICHTING_SCHUIN_45);
+		
+		System.out.println("ga naar achter en naar rechts!");
+		centraal.rijRichting(centraal.RICHTING_SCHUIN_135);
+		
+		System.out.println("ga naar achter en naar lings!");
+		centraal.rijRichting(centraal.RICHTING_SCHUIN_225);
+		
+		System.out.println("ga naar voor en naar lings!");
+		centraal.rijRichting(centraal.RICHTING_SCHUIN_315); 
+		
 	}
 	
 	public void initThreads()
@@ -83,16 +117,16 @@ public class Centraal {
 		this.MotorRaController = new StappenMotorController(this.gpio, this.PinRa, this.PinRaDir);
 	}
 	
-	public void setDirections(boolean wielLvDir, boolean wielLaDir, boolean wielRvDir, boolean wielRaDir) 
+	public void setDirections(boolean wielLvDir, boolean turnLv, boolean wielLaDir, boolean turnLa, boolean wielRvDir, boolean turnRv, boolean wielRaDir, boolean turnRa) 
 	{
 		while(true) 
 		{
 			if(!this.MotorLvController.getmotorStand() && !this.MotorLaController.getmotorStand() && !this.MotorRvController.getmotorStand() && !this.MotorRaController.getmotorStand())
 			{			
-				this.MotorLvController.setDir(wielLvDir);
-				this.MotorLaController.setDir(wielLaDir);
-				this.MotorRvController.setDir(wielRvDir);
-				this.MotorRaController.setDir(wielRaDir);
+				this.MotorLvController.setDir(wielLvDir, turnLv);
+				this.MotorLaController.setDir(wielLaDir, turnLa);
+				this.MotorRvController.setDir(wielRvDir, turnRv);
+				this.MotorRaController.setDir(wielRaDir, turnRa);
 				break;
 			}
 		}
@@ -100,11 +134,16 @@ public class Centraal {
 	
 	public void rijRichting(int richting) 
 	{
-		if(richting == this.RICHTING_VOORUIT) this.setDirections(this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT);
-		if(richting == this.RICHTING_ACHTERUIT) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT);
-		if(richting == this.RICHTING_RECHTS) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_ACHTERUIT);
-		if(richting == this.RICHTING_LINKS) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT, this.WIEL_ACHTERUIT);
-		if(richting == this.RICHTING_DRAAI) this.setDirections(this.WIEL_ACHTERUIT, this.WIEL_ACHTERUIT, this.WIEL_VOORUIT, this.WIEL_VOORUIT);
+		if(richting == this.RICHTING_VOORUIT) this.setDirections(this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL,this.WIEL_VOORUIT, this.DRAAI_WEL,this.WIEL_VOORUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_ACHTERUIT) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_RECHTS) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_LINKS) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_DRAAI_RECHTS) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_DRAAI_LINGS) this.setDirections(this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_SCHUIN_45) this.setDirections(this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_NIET,  this.WIEL_VOORUIT, this.DRAAI_NIET, this.WIEL_VOORUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_SCHUIN_135) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_NIET, this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_NIET);
+		if(richting == this.RICHTING_SCHUIN_225) this.setDirections(this.WIEL_ACHTERUIT, this.DRAAI_WEL, this.WIEL_ACHTERUIT, this.DRAAI_NIET,  this.WIEL_ACHTERUIT, this.DRAAI_NIET, this.WIEL_ACHTERUIT, this.DRAAI_WEL);
+		if(richting == this.RICHTING_SCHUIN_315) this.setDirections(this.WIEL_VOORUIT, this.DRAAI_NIET, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_WEL, this.WIEL_VOORUIT, this.DRAAI_NIET);
 	}
 	
 	/*

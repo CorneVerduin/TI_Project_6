@@ -2,22 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/junit.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-core.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-core-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-core-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-device.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-device-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-device-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-example.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-example-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-example-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-gpio-extension.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-gpio-extension-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-gpio-extension-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-service.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-service-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-service-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opencv"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCV-3.2.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/pi4j"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
