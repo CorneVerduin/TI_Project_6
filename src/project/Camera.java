@@ -53,6 +53,11 @@ public class Camera implements Runnable
 		
 		Centraal centraal = new Centraal();
 		
-		if(count > 2000) centraal.rijRichting(4);
+		if(count > 2000) 
+		{
+			// doe dansje aan het eind
+			
+			centraal.rijRichting(4);
+		}
 	}
 }

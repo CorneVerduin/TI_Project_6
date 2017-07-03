@@ -53,17 +53,28 @@ public class Centraal {
 	{
 		Centraal centraal = new Centraal();
 		
+		Camera cam = new Camera();
+		Thread camThread = new Thread(cam);
+		camThread.start();
+		
 		centraal.InitMotors();
 		centraal.initThreads();
 		
+		//rijen instellen in buffer
+		centraal.rijRichting(centraal.RICHTING_LINKS);
+		centraal.rijRichting(centraal.RICHTING_RECHTS);
 		centraal.rijRichting(centraal.RICHTING_VOORUIT);
+		centraal.rijRichting(centraal.RICHTING_ACHTERUIT);
+		centraal.rijRichting(centraal.RICHTING_DRAAI);
 		
+		
+		// start motoren
 		centraal.MotorLa.start();
 		centraal.MotorLv.start();
 		centraal.MotorRv.start();
 		centraal.MotorRa.start();
 	
-		
+		// nieuwe richtingen:
 	}
 	
 	public void initThreads()

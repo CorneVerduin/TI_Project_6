@@ -13,6 +13,7 @@ public class StappenMotorController implements Runnable {
 	
 	private GpioController gpio;
 	
+	// buffer voor komende richtingen.
 	List<Boolean> directions = new ArrayList<Boolean>();
 	
 	public StappenMotorController(GpioController gpio, GpioPinDigitalOutput selectedPin,  GpioPinDigitalOutput selectedPinDir)
@@ -31,6 +32,7 @@ public class StappenMotorController implements Runnable {
 		int directionCount = directions.size();
 		int i;
 		
+		// loop door buffer en draai wiel
 		for(i = 0; i < directionCount; i++)
 		{
 			this.draaiWiel(directions.get(i));
