@@ -2,6 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCV-3.2.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/pi4j"/>
 	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/junit.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-core.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Kevin/Desktop/projecten/magazijnrobot/pi4j/pi4j-core-javadoc.jar"/>
